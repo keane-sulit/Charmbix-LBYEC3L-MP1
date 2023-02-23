@@ -220,7 +220,6 @@ go_done
 go_done_bit
 go_not_done
 go_not_done_bit
-hours
 ibf
 ibf_bit
 ibf_trise_bit
@@ -455,6 +454,7 @@ rx9d_bit
 s
 s_bit
 sdiv3232l
+seconds
 sen
 sen_bit
 setfdz32
