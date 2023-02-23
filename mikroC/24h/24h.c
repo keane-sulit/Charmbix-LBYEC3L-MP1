@@ -52,22 +52,22 @@
 // Global variables
 unsigned int hours = 13;
 unsigned int minutes = 30;
-
+sbit A1 at RD2_bit;
 // Initialization function
 void init() {
-    TRISA = 0;
-    TRISB = 0;
-    TRISC = 0;
-    TRISD = 0;
+    TRISA = 0;      // Set PORTA as output 
+    TRISB = 0;      // Set PORTB as output
+    TRISC = 0;      // Set PORTC as output
+    TRISD = 0;      // Set PORTD as output
     ADCON1.F1 = 1;
     ADCON1.F2 = 1;
-    ADCON1.F3 = 0;
+    ADCON1.F3 = 0;  
 }
 
 // Display digit function
 void display_digit(int digit, char display_num) {
     char segA, segB, segC, segD, segE, segF, segG;
-    // Seven-segment display cases
+    // Seven-segment display patterns
     switch (digit) {
     case 0:
         segA = 1;
@@ -169,7 +169,7 @@ void display_digit(int digit, char display_num) {
         segG = 0;
         break;
     }
-    // Seven-segment display cases based on given specifications
+    // Seven-segment display patterns based on given specifications
     switch(display_num) {
     case 1:
         PORTD.F2 = segA;
@@ -209,32 +209,30 @@ void display_digit(int digit, char display_num) {
         break;
 
     }
-
-
 }
 
 // Display time function
 void display_time(int hours, int minutes) {
     // Display hours
-    display_digit(hours / 10, 1);
-    display_digit(hours % 10, 2);
+    display_digit(hours / 10, 1);   // Display first digit of hours
+    display_digit(hours % 10, 2);   // Display second digit of hours
     // Display minutes
-    display_digit(minutes / 10, 3);
-    display_digit(minutes % 10, 4);
+    display_digit(minutes / 10, 3); // Display first digit of minutes
+    display_digit(minutes % 10, 4); // Display second digit of minutes
 }
 
 // Main function
 void main() {
-    init(); // Initialize ports
+    init();                         // Initialize ports
     display_time(hours, minutes);   // Display initial time
-    while (1) { // Infinite loop
-        delay_ms(60000);   // Increment minutes every minute
-        minutes++;  // Increment time
-        if (minutes == 60) { // Check if minutes is 60
-            minutes = 0;    // Reset minutes if 60
-            hours++;        // Increment hours
-            if (hours == 24) {  // Check if hours is 24
-                hours = 0;  // Reset hours to 0 if 24
+    while (1) {                     // Infinite loop
+        delay_ms(60000);            // Increment minutes every minute
+        minutes++;                  // Increment time
+        if (minutes == 60) {        // Check if minutes is 60
+            minutes = 0;            // Reset minutes if 60
+            hours++;                // Increment hours
+            if (hours == 24) {      // Check if hours is 24
+                hours = 0;          // Reset hours to 0 if 24
             }
         }
         display_time(hours, minutes);
