@@ -1,4 +1,4 @@
-/* [LBYEC3L] Machine Problem 1
+/* [LBYEC3L] Machine Problem 1 - Timer
 * ===========================
 * Authors: Dayrit, Bettina Gaille H., BS-ECE2
 *          Guevarra, Gia Kyla S., BS-ECE2
@@ -231,11 +231,7 @@ void main() {
         
         if (seconds < 0) {                  // If seconds is negative
             seconds = 59;                   // Reset seconds
-            if (minutes > 0) {              // If minutes is positive
-                minutes--;                  // Decrement minutes
-            } else {                        // Otherwise, if minutes is 0, break the loop
-                seconds = 0;;
-            }
+            minutes--;                      // Decrement minutes
         }         
         if (minutes < 0) {                  // If minutes is negative
             minutes = 99;                   // Reset minutes

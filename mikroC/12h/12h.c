@@ -52,7 +52,7 @@
 // Global variables
 unsigned int hours = 13;
 unsigned int minutes = 30;
-sbit A1 at RD2_bit;
+
 // Initialization function
 void init() {
     TRISA = 0;      // Set PORTA as output 
@@ -223,18 +223,18 @@ void display_time(int hours, int minutes) {
 
 // Main function
 void main() {
-    init();                         // Initialize ports
-    display_time(hours, minutes);   // Display initial time
-    while (1) {                     // Infinite loop
-        delay_ms(60000);            // Increment minutes every minute
-        minutes++;                  // Increment time
-        if (minutes == 60) {        // Check if minutes is 60
-            minutes = 0;            // Reset minutes if 60
-            hours++;                // Increment hours
-            if (hours == 13) {      // Check if hours is 13
-                hours = 1;          // Reset hours to 1 if 13
+    init();                             // Initialize ports
+    display_time(hours, minutes);       // Display initial time
+    while (1) {                         // Infinite loop
+        delay_ms(60000);                // Increment minutes every minute
+        minutes++;                      // Increment time
+        if (minutes == 60) {            // Check if minutes is 60
+            minutes = 0;                // Reset minutes if 60
+            hours++;                    // Increment hours
+            if (hours == 13) {          // Check if hours is 13
+                hours = 1;              // Reset hours to 1 if 13
             }
         }
-        display_time(hours, minutes);
+        display_time(hours, minutes);   // Display and update time
     }
 }

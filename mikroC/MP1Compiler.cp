@@ -1,7 +1,7 @@
 #line 1 "//Mac/Home/Documents/GitHub/Charmbix-LBYEC3L-MP1/mikroC/MP1Compiler.c"
-#line 53 "//Mac/Home/Documents/GitHub/Charmbix-LBYEC3L-MP1/mikroC/MP1Compiler.c"
-unsigned int hours = 13;
-unsigned int minutes = 30;
+#line 54 "//Mac/Home/Documents/GitHub/Charmbix-LBYEC3L-MP1/mikroC/MP1Compiler.c"
+unsigned int minutes = 1;
+unsigned int seconds = 30;
 
 
 void init() {
@@ -157,36 +157,51 @@ void display_digit(int digit, char display_num) {
  PORTC.F3 = segF;
  PORTB.F3 = segG;
  break;
-
  }
-
-
 }
 
 
-void display_time(int hours, int minutes) {
+void display_time(int minutes, int seconds) {
 
- display_digit(hours / 10, 1);
- display_digit(hours % 10, 2);
+ display_digit(minutes / 10, 1);
+ display_digit(minutes % 10, 2);
 
- display_digit(minutes / 10, 3);
- display_digit(minutes % 10, 4);
+ display_digit(seconds / 10, 3);
+ display_digit(seconds % 10, 4);
 }
 
 
 void main() {
  init();
- display_time(hours, minutes);
+ display_time(minutes, seconds);
  while (1) {
- delay_ms(60000);
- minutes++;
- if (minutes == 60) {
- minutes = 0;
- hours++;
- if (hours == 24) {
- hours = 0;
+ delay_ms(1000);
+ seconds--;
+
+ if (seconds < 0) {
+ seconds = 59;
+ if (minutes > 0) {
+ minutes--;
+ } else {
+ seconds = 0;;
  }
  }
- display_time(hours, minutes);
+ if (minutes < 0) {
+ minutes = 99;
  }
+
+ if (minutes == 0 && seconds == 0) {
+ while (1) {
+ display_digit(10, 1);
+ display_digit(10, 2);
+ display_digit(10, 3);
+ display_digit(10, 4);
+ delay_ms(500);
+ display_time(0, 0);
+ delay_ms(500);
+ }
+ }
+ display_time(minutes, seconds);
+ }
+
 }
