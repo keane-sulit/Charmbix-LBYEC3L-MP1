@@ -52,7 +52,6 @@
 // Global variables
 unsigned int hours = 13;
 unsigned int minutes = 30;
-sbit A1 at RD2_bit;
 // Initialization function
 void init() {
     TRISA = 0;      // Set PORTA as output 
