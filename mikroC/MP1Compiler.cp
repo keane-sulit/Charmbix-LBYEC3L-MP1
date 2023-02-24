@@ -15,8 +15,8 @@ void init() {
 }
 
 
-void display_digit(int digit, char display_num) {
- char segA, segB, segC, segD, segE, segF, segG;
+void display_digit(int digit, int display_num) {
+ int segA, segB, segC, segD, segE, segF, segG;
 
  switch (digit) {
  case 0:
@@ -171,21 +171,29 @@ void display_time(int minutes, int seconds) {
 }
 
 
-void main() {
- init();
- display_time(minutes, seconds);
- while (1) {
- delay_ms(1000);
+void decrement_time() {
+
  if (seconds > 0) {
  seconds --;
+
  } else {
  if(minutes > 0) {
  minutes --;
  seconds = 59;
  }
  }
+}
+
+
+void main() {
+ init();
+ display_time(minutes, seconds);
+ while (1) {
+ delay_ms(1000);
+ decrement_time();
  display_time(minutes, seconds);
  delay_ms(500);
+
  if (minutes == 0 && seconds ==0) {
  while (1) {
  display_digit(10, 1);

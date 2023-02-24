@@ -214,11 +214,23 @@ void display_digit(int digit, char display_num) {
 // Display time function
 void display_time(int hours, int minutes) {
     // Display hours
-    display_digit(hours / 10, 1);   // Display first digit of hours
-    display_digit(hours % 10, 2);   // Display second digit of hours
+    display_digit(hours / 10, 1);       // Display first digit of hours
+    display_digit(hours % 10, 2);       // Display second digit of hours
     // Display minutes
-    display_digit(minutes / 10, 3); // Display first digit of minutes
-    display_digit(minutes % 10, 4); // Display second digit of minutes
+    display_digit(minutes / 10, 3);     // Display first digit of minutes
+    display_digit(minutes % 10, 4);     // Display second digit of minutes
+}
+
+// Increment time function
+void increment_time() {
+    minutes++;                          // Increment minutes
+    if (minutes == 60) {                // Check if minutes is 60
+        minutes = 0;                    // Reset minutes if 60
+        hours++;                        // Increment hours
+        if (hours == 24) {              // Check if hours is 24
+            hours = 0;                  // Reset hours to 0 if 24
+        }
+    }
 }
 
 // Main function
@@ -227,14 +239,7 @@ void main() {
     display_time(hours, minutes);       // Display initial time
     while (1) {                         // Infinite loop
         delay_ms(60000);                // Increment minutes every minute
-        minutes++;                      // Increment time
-        if (minutes == 60) {            // Check if minutes is 60
-            minutes = 0;                // Reset minutes if 60
-            hours++;                    // Increment hours
-            if (hours == 24) {          // Check if hours is 24
-                hours = 0;              // Reset hours to 0 if 24
-            }
-        }
+        increment_time();               // Increment time
         display_time(hours, minutes);   // Display and update time
     }
 }

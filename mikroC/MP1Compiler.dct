@@ -161,6 +161,7 @@ data_address
 data_address_bit
 dc
 dc_bit
+decrement_time
 delay_100ms
 delay_10ms
 delay_10us

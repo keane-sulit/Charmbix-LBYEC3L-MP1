@@ -6,4 +6,5 @@ main
 		Div_16x16_S
 			Div_16x16_S_L
 		display_digit
+	decrement_time
 	display_digit

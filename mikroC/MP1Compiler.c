@@ -1,4 +1,4 @@
-/* [LBYEC3L] Machine Problem 1
+/* [LBYEC3L] Machine Problem 1 - Timer Clock
 * ===========================
 * Authors: Dayrit, Bettina Gaille H., BS-ECE2
 *          Guevarra, Gia Kyla S., BS-ECE2
@@ -66,8 +66,8 @@ void init() {
 }
 
 // Display digit function
-void display_digit(int digit, char display_num) {
-    char segA, segB, segC, segD, segE, segF, segG;
+void display_digit(int digit, int display_num) {
+    int segA, segB, segC, segD, segE, segF, segG;
     // Seven-segment display patterns
     switch (digit) {
     case 0:
@@ -214,38 +214,46 @@ void display_digit(int digit, char display_num) {
 // Display time function
 void display_time(int minutes, int seconds) {
     // Display minutes
-    display_digit(minutes / 10, 1);
-    display_digit(minutes % 10, 2);
+    display_digit(minutes / 10, 1);             // Display tens digit of minutes
+    display_digit(minutes % 10, 2);             // Display ones digit of minutes
     // Display seconds
-    display_digit(seconds / 10, 3);
-    display_digit(seconds % 10, 4);
+    display_digit(seconds / 10, 3);             // Display tens digit of seconds
+    display_digit(seconds % 10, 4);             // Display ones digit of seconds
+}
+
+// Decrement time function
+void decrement_time() {
+    // If seconds is greater than 0, decrement by 1
+    if (seconds > 0) {
+        seconds --;
+    // If seconds is 0, decrement minutes by 1 and set seconds to 59
+    } else {
+        if(minutes > 0) {
+            minutes --;
+            seconds = 59;
+        }
+    }
 }
 
 // Main function
 void main() {
-    init();                                 // Initialize ports
-    display_time(minutes, seconds);         // Display initial time
-    while (1) {                             // Infinite loop
-        delay_ms(1000);                     // Decrement seconds every second
-        if (seconds > 0) {
-            seconds --;
-        } else {
-            if(minutes > 0) {
-                minutes --;
-                seconds = 59;
-            }
-        }
-        display_time(minutes, seconds);     // Display time
+    init();                                     // Initialize ports
+    display_time(minutes, seconds);             // Display initial time
+    while (1) {                                 // Infinite loop
+        delay_ms(1000);                         // Decrement by 1 second
+        decrement_time();                       // Decrement time
+        display_time(minutes, seconds);         // Display updated time
         delay_ms(500);
+        // If time is up, blink all digits
         if (minutes == 0 && seconds ==0) {
-            while (1) {
-                display_digit(10, 1);
-                display_digit(10, 2);
-                display_digit(10, 3);
-                display_digit(10, 4);
-                delay_ms(500);
-                display_time(0, 0);
-                delay_ms(500);
+            while (1) {                         // Infinite loop
+                display_digit(10, 1);           // Turn off tens digit of minutes
+                display_digit(10, 2);           // Turn off ones digit of minutes
+                display_digit(10, 3);           // Turn off tens digit of seconds
+                display_digit(10, 4);           // Turn off ones digit of seconds
+                delay_ms(500);                  // Delay 500 ms
+                display_time(0, 0);             // Display 00:00
+                delay_ms(500);                  // Delay 500 ms
             }
         }
     }
