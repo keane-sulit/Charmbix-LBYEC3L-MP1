@@ -227,7 +227,34 @@ void main() {
     display_time(minutes, seconds);         // Display initial time
     while (1) {                             // Infinite loop
         delay_ms(1000);                     // Decrement seconds every second
-        seconds--;                          // Decrement time
+        if (seconds > 0) {
+            seconds --;
+        } else {
+            if(minutes > 0) {
+                minutes --;
+                seconds = 59;
+            }
+        }
+        display_time(minutes, seconds);     // Display time
+        delay_ms(500);
+        if (minutes == 0 && seconds ==0) {
+            while (1) {
+                display_digit(10, 1);
+                display_digit(10, 2);
+                display_digit(10, 3);
+                display_digit(10, 4);
+                delay_ms(500);
+                display_time(0, 0);
+                delay_ms(500);
+            }
+        }
+    }
+}
+        
+        
+        
+        
+        /* seconds--;                          // Decrement time
         
         if (seconds < 0) {                  // If seconds is negative
             seconds = 59;                   // Reset seconds
@@ -253,6 +280,4 @@ void main() {
             }
         }
         display_time(minutes, seconds);    // Display and update time
-    }
-
-}
+    } */

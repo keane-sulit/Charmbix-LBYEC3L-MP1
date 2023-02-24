@@ -749,27 +749,25 @@ L_main21:
 	DECFSZ     R11+0, 1
 	GOTO       L_main21
 	NOP
-;MP1Compiler.c,230 :: 		seconds--;                          // Decrement time
+;MP1Compiler.c,230 :: 		if (seconds > 0) {
+	MOVF       _seconds+1, 0
+	SUBLW      0
+	BTFSS      STATUS+0, 2
+	GOTO       L__main104
+	MOVF       _seconds+0, 0
+	SUBLW      0
+L__main104:
+	BTFSC      STATUS+0, 0
+	GOTO       L_main22
+;MP1Compiler.c,231 :: 		seconds --;
 	MOVLW      1
 	SUBWF      _seconds+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _seconds+1, 1
-;MP1Compiler.c,232 :: 		if (seconds < 0) {                  // If seconds is negative
-	MOVLW      0
-	SUBWF      _seconds+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__main104
-	MOVLW      0
-	SUBWF      _seconds+0, 0
-L__main104:
-	BTFSC      STATUS+0, 0
-	GOTO       L_main22
-;MP1Compiler.c,233 :: 		seconds = 59;                   // Reset seconds
-	MOVLW      59
-	MOVWF      _seconds+0
-	MOVLW      0
-	MOVWF      _seconds+1
-;MP1Compiler.c,234 :: 		if (minutes > 0) {              // If minutes is positive
+;MP1Compiler.c,232 :: 		} else {
+	GOTO       L_main23
+L_main22:
+;MP1Compiler.c,233 :: 		if(minutes > 0) {
 	MOVF       _minutes+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -778,62 +776,69 @@ L__main104:
 	SUBLW      0
 L__main105:
 	BTFSC      STATUS+0, 0
-	GOTO       L_main23
-;MP1Compiler.c,235 :: 		minutes--;                  // Decrement minutes
+	GOTO       L_main24
+;MP1Compiler.c,234 :: 		minutes --;
 	MOVLW      1
 	SUBWF      _minutes+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _minutes+1, 1
-;MP1Compiler.c,236 :: 		} else {                        // Otherwise, if minutes is 0, break the loop
-	GOTO       L_main24
-L_main23:
-;MP1Compiler.c,237 :: 		seconds = 0;;
-	CLRF       _seconds+0
-	CLRF       _seconds+1
-;MP1Compiler.c,238 :: 		}
+;MP1Compiler.c,235 :: 		seconds = 59;
+	MOVLW      59
+	MOVWF      _seconds+0
+	MOVLW      0
+	MOVWF      _seconds+1
+;MP1Compiler.c,236 :: 		}
 L_main24:
-;MP1Compiler.c,239 :: 		}
-L_main22:
-;MP1Compiler.c,240 :: 		if (minutes < 0) {                  // If minutes is negative
-	MOVLW      0
-	SUBWF      _minutes+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__main106
-	MOVLW      0
-	SUBWF      _minutes+0, 0
-L__main106:
-	BTFSC      STATUS+0, 0
-	GOTO       L_main25
-;MP1Compiler.c,241 :: 		minutes = 99;                   // Reset minutes
-	MOVLW      99
-	MOVWF      _minutes+0
-	MOVLW      0
-	MOVWF      _minutes+1
-;MP1Compiler.c,242 :: 		}
+;MP1Compiler.c,237 :: 		}
+L_main23:
+;MP1Compiler.c,238 :: 		display_time(minutes, seconds);     // Display time
+	MOVF       _minutes+0, 0
+	MOVWF      FARG_display_time_minutes+0
+	MOVF       _minutes+1, 0
+	MOVWF      FARG_display_time_minutes+1
+	MOVF       _seconds+0, 0
+	MOVWF      FARG_display_time_seconds+0
+	MOVF       _seconds+1, 0
+	MOVWF      FARG_display_time_seconds+1
+	CALL       _display_time+0
+;MP1Compiler.c,239 :: 		delay_ms(500);
+	MOVLW      13
+	MOVWF      R11+0
+	MOVLW      175
+	MOVWF      R12+0
+	MOVLW      182
+	MOVWF      R13+0
 L_main25:
-;MP1Compiler.c,244 :: 		if (minutes == 0 && seconds == 0) { // If time is up
+	DECFSZ     R13+0, 1
+	GOTO       L_main25
+	DECFSZ     R12+0, 1
+	GOTO       L_main25
+	DECFSZ     R11+0, 1
+	GOTO       L_main25
+	NOP
+;MP1Compiler.c,240 :: 		if (minutes == 0 && seconds ==0) {
 	MOVLW      0
 	XORWF      _minutes+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main107
+	GOTO       L__main106
 	MOVLW      0
 	XORWF      _minutes+0, 0
-L__main107:
+L__main106:
 	BTFSS      STATUS+0, 2
 	GOTO       L_main28
 	MOVLW      0
 	XORWF      _seconds+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main108
+	GOTO       L__main107
 	MOVLW      0
 	XORWF      _seconds+0, 0
-L__main108:
+L__main107:
 	BTFSS      STATUS+0, 2
 	GOTO       L_main28
 L__main33:
-;MP1Compiler.c,245 :: 		while (1) {                     // Continuous blinking of 00:00
+;MP1Compiler.c,241 :: 		while (1) {
 L_main29:
-;MP1Compiler.c,246 :: 		display_digit(10, 1);
+;MP1Compiler.c,242 :: 		display_digit(10, 1);
 	MOVLW      10
 	MOVWF      FARG_display_digit_digit+0
 	MOVLW      0
@@ -841,7 +846,7 @@ L_main29:
 	MOVLW      1
 	MOVWF      FARG_display_digit_display_num+0
 	CALL       _display_digit+0
-;MP1Compiler.c,247 :: 		display_digit(10, 2);
+;MP1Compiler.c,243 :: 		display_digit(10, 2);
 	MOVLW      10
 	MOVWF      FARG_display_digit_digit+0
 	MOVLW      0
@@ -849,7 +854,7 @@ L_main29:
 	MOVLW      2
 	MOVWF      FARG_display_digit_display_num+0
 	CALL       _display_digit+0
-;MP1Compiler.c,248 :: 		display_digit(10, 3);
+;MP1Compiler.c,244 :: 		display_digit(10, 3);
 	MOVLW      10
 	MOVWF      FARG_display_digit_digit+0
 	MOVLW      0
@@ -857,7 +862,7 @@ L_main29:
 	MOVLW      3
 	MOVWF      FARG_display_digit_display_num+0
 	CALL       _display_digit+0
-;MP1Compiler.c,249 :: 		display_digit(10, 4);
+;MP1Compiler.c,245 :: 		display_digit(10, 4);
 	MOVLW      10
 	MOVWF      FARG_display_digit_digit+0
 	MOVLW      0
@@ -865,7 +870,7 @@ L_main29:
 	MOVLW      4
 	MOVWF      FARG_display_digit_display_num+0
 	CALL       _display_digit+0
-;MP1Compiler.c,250 :: 		delay_ms(500);
+;MP1Compiler.c,246 :: 		delay_ms(500);
 	MOVLW      13
 	MOVWF      R11+0
 	MOVLW      175
@@ -880,13 +885,13 @@ L_main31:
 	DECFSZ     R11+0, 1
 	GOTO       L_main31
 	NOP
-;MP1Compiler.c,251 :: 		display_time(0, 0);
+;MP1Compiler.c,247 :: 		display_time(0, 0);
 	CLRF       FARG_display_time_minutes+0
 	CLRF       FARG_display_time_minutes+1
 	CLRF       FARG_display_time_seconds+0
 	CLRF       FARG_display_time_seconds+1
 	CALL       _display_time+0
-;MP1Compiler.c,252 :: 		delay_ms(500);
+;MP1Compiler.c,248 :: 		delay_ms(500);
 	MOVLW      13
 	MOVWF      R11+0
 	MOVLW      175
@@ -901,23 +906,13 @@ L_main32:
 	DECFSZ     R11+0, 1
 	GOTO       L_main32
 	NOP
-;MP1Compiler.c,253 :: 		}
+;MP1Compiler.c,249 :: 		}
 	GOTO       L_main29
-;MP1Compiler.c,254 :: 		}
+;MP1Compiler.c,250 :: 		}
 L_main28:
-;MP1Compiler.c,255 :: 		display_time(minutes, seconds);    // Display and update time
-	MOVF       _minutes+0, 0
-	MOVWF      FARG_display_time_minutes+0
-	MOVF       _minutes+1, 0
-	MOVWF      FARG_display_time_minutes+1
-	MOVF       _seconds+0, 0
-	MOVWF      FARG_display_time_seconds+0
-	MOVF       _seconds+1, 0
-	MOVWF      FARG_display_time_seconds+1
-	CALL       _display_time+0
-;MP1Compiler.c,256 :: 		}
+;MP1Compiler.c,251 :: 		}
 	GOTO       L_main19
-;MP1Compiler.c,258 :: 		}
+;MP1Compiler.c,252 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

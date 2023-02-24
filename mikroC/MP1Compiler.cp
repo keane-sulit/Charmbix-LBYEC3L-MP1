@@ -176,21 +176,17 @@ void main() {
  display_time(minutes, seconds);
  while (1) {
  delay_ms(1000);
- seconds--;
-
- if (seconds < 0) {
- seconds = 59;
- if (minutes > 0) {
- minutes--;
+ if (seconds > 0) {
+ seconds --;
  } else {
- seconds = 0;;
+ if(minutes > 0) {
+ minutes --;
+ seconds = 59;
  }
  }
- if (minutes < 0) {
- minutes = 99;
- }
-
- if (minutes == 0 && seconds == 0) {
+ display_time(minutes, seconds);
+ delay_ms(500);
+ if (minutes == 0 && seconds ==0) {
  while (1) {
  display_digit(10, 1);
  display_digit(10, 2);
@@ -201,7 +197,5 @@ void main() {
  delay_ms(500);
  }
  }
- display_time(minutes, seconds);
  }
-
 }
