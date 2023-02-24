@@ -250,34 +250,3 @@ void main() {
         }
     }
 }
-        
-        
-        
-        
-        /* seconds--;                          // Decrement time
-        
-        if (seconds < 0) {                  // If seconds is negative
-            seconds = 59;                   // Reset seconds
-            if (minutes > 0) {              // If minutes is positive
-                minutes--;                  // Decrement minutes
-            } else {                        // Otherwise, if minutes is 0, break the loop
-                seconds = 0;;
-            }
-        }         
-        if (minutes < 0) {                  // If minutes is negative
-            minutes = 99;                   // Reset minutes
-        }
-        
-        if (minutes == 0 && seconds == 0) { // If time is up
-            while (1) {                     // Continuous blinking of 00:00
-                display_digit(10, 1);
-                display_digit(10, 2);
-                display_digit(10, 3);
-                display_digit(10, 4);
-                delay_ms(500);
-                display_time(0, 0);
-                delay_ms(500);
-            }
-        }
-        display_time(minutes, seconds);    // Display and update time
-    } */
